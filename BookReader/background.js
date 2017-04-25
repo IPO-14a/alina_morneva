@@ -1,3 +1,3 @@
 chrome.browserAction.onClicked.addListener(function(tab) {
-  chrome.tabs.create({url:chrome.extension.getURL("books.html")});
+  chrome.tabs.create({url:chrome.extension.getURL("reader.html")});
 });
