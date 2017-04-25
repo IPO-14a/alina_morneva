@@ -140,7 +140,7 @@ function buildPages()
   var totalHeight = (window.innerHeight + scrollMaxY);
   var contentWidth = window.innerWidth;
 
-  if (totalHeight - 40 > window.innerHeight)
+  if (totalHeight - 100 > window.innerHeight)
   {
     var pageRatio = totalHeight / window.innerHeight;
     contentWidth = (window.innerWidth > window.innerHeight) ? (pageRatio * window.innerWidth) + (window.innerWidth) : (pageRatio * window.innerHeight) + window.innerHeight;
