@@ -6,6 +6,13 @@ var mover = null;
 * Функция преднозначена для открытия премера книги,
 * загружает событья для обработки нажатия кнопок мыши
 * загружает обработких кнопки возврата страницы
+* Отображает элемент menu, и запускает обработчик
+* FileReader. 
+* Объект XMLHttpRequest дает возможность 
+* браузеру делать HTTP-запросы без перезагрузки страницы.
+* onreadystatechange - ссылается на функцию-обработчик 
+* состояний запроса. В некоторых браузерах функция имеет 
+* аргумент - событие. Не используйте его, он совершенно лишний.
 */
 function preview()
 {
@@ -24,6 +31,8 @@ function preview()
   }
 
 /**
+* addEventListener() - регистрирует определенный обработчик 
+* события, вызванного на EventTarget.
 * Обработчик вызывает функцию evt путем нажатия на кнопку мыши
 * ивызывает работу директива mover.
 * Если нажатие попало на одну из областей
@@ -36,6 +45,9 @@ function preview()
   document.addEventListener('touchmove', function(evt) {mover.mouseMove(evt);}, false);
   document.addEventListener('touchend', function(evt) {mover.mouseEnd(evt);}, false);
 
+/**
+* Возвращает ссылку на элемент по его идентификатору (ID); 
+*/
   var back = document.getElementById('back');
 
 /**
@@ -46,7 +58,7 @@ function preview()
 }
 
 /**
-* Функция открывает file для чтения
+* Функция открывает file для чтения. 
 * 
 * Если файл имеет расширение epub, запускается функция 
 * createBook.
@@ -65,6 +77,11 @@ function update(file)
       createBook(reader.result);
     };
   } else {
+    /**
+    * Метод readAsText используется для чтения содержимого указанного file. 
+    * Когда операция чтения завершена, состояние readyState изменяется на DONE, 
+    * запускается loadend, а атрибут result содержит содержимое файла в виде текстовой строки.
+    */
     reader.readAsText(file.item(0));
     reader.onload = function(event)
     {
@@ -98,6 +115,7 @@ function createBook(epub)
 /**
 * Функция разбивает текс на страницы
 * 
+* Создает элементы style и отрисовывает их в body
 * Загружает в fileBox элементы файла getElementById
 * Отображает текст на странице HTML
 */ 
@@ -162,6 +180,7 @@ function showChapter(dir) {
 * Функция размещает текст файла на странице
 * применяет к нему стили, определяет ширину 
 * и высоту экрана
+* Применяет данные стилик page
 */
 function buildPages()
 {
@@ -181,8 +200,8 @@ function buildPages()
   }
 
   var style = '#pages{' +
-    ' -moz-column-width: ' + (window.innerWidth - 100) + 'px!important;' + 
-    ' -webkit-column-width: ' + (window.innerWidth - 100) + 'px!important;' +
+    ' -moz-column-width: ' + (window.innerWidth - 80) + 'px!important;' + 
+    ' -webkit-column-width: ' + (window.innerWidth - 80) + 'px!important;' +
     ' width: ' + contentWidth + 'px!important;' +
     '-moz-column-gap: 80px;' +
     '-webkit-column-gap: 80px;' +
@@ -245,7 +264,15 @@ var moving = function(evt) {
   this.active = true;
 };
 
+/**
+* Функции отбаботки нажатия мыши
+*/
 moving.prototype = {
+  /**
+  * Если мышка активна, отслеживаем место ее нажатия,
+  * и координаты ее передвижения
+  * Смещаем страницу относительно движения мышки
+  */
   mouseMove: function(callingEvt) {
     if (this.active === true)
     {
@@ -259,6 +286,11 @@ moving.prototype = {
     }
   },
 
+  /**
+  * Если мышка не активна, вызываем функцию toggleMenu(),
+  * Если смещение было больше 250, отображаем
+  * новую страницу, иначе ображаемся к прошлой странице
+  */
   mouseEnd: function(callingEvt) {
     this.active = false;
     var offset = callingEvt.screenX - this.startX;
@@ -284,7 +316,7 @@ moving.prototype = {
 
 /**
 * Функция загружает обработчики нажатия кнопок,
-* стии для страницы, загружает preview
+* стили для страницы, загружает preview
 */
 window.onload = function()
 {
