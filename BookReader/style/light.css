@@ -5,6 +5,7 @@ p, h1, h2, h3, h4, h5, h6 {
 h1, h2, h3, h4, strong {color: #004654;}
 body {
     background: #d0d0d0;
+    color: #d0d0d0;
     background: -webkit-linear-gradient(180deg,#abbaab 10%,#fff 90%);
     background: -moz-linear-gradient(180deg,#abbaab 10%,#fff 90%);
     background: -ms-linear-gradient(180deg,#abbaab 10%,#fff 90%);
