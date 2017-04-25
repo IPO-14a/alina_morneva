@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- This document was created with Syntext Serna Free. -->
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "docbookV4.5/docbookx.dtd" []>
+<article>
+  <title>Book Reader</title>
+  <articleinfo>
+    <abstract>
+      <title/>
+      <para>При написании программы использовались такие языковые средства: JavaScript, CSS, JQuery.</para>
+    </abstract>
+  </articleinfo>
+  <para>Функционал программы позволяет читать книги разных форматов, таких как : ePub, fb2, txt. Программа преднозначена как расширение для  браузера GoogleChrome.</para>
+  <para>Потребность в разработке нового решения при существовании готовых продуктов, которые частично реализуют требования, описанные в ТЗ, обусловлено тем, что обычно предлагаемыйе программы редко встречаются в браузерах как расширения либо являются  некачественным продуктом.</para>
+  <abstract>
+    <title>Пример 1: Открытие примера книги</title>
+    <para>Позволяет открыть пробную книгу, которая является частью проэкта с целью просмотра его функционала.</para>
+    <para>function preview()
+{
+  </para>
+    <para>document.getElementById(&apos;menu&apos;).style.display = &apos;none&apos;;
+  </para>
+    <para>var reader = new FileReader();
+  
+  </para>
+    <para>var xhr = new XMLHttpRequest();</para>
+    <para>xhr.open(&apos;GET&apos;, &apos;books/Preview.txt&apos;, true)
+  xhr.send(null);
+
+  </para>
+    <para>xhr.onreadystatechange = function(){
+    </para>
+    <para>if(xhr.readyState === 4)
+    </para>
+    <para>{
+      </para>
+    <para>bookFromText(xhr.responseText);
+    </para>
+    <para>}
+  </para>
+    <para>}
+
+</para>
+    <para>document.addEventListener(&apos;mousedown&apos;, function(evt) {mover = new moving(evt);}, false);
+  </para>
+    <para>document.addEventListener(&apos;mousemove&apos;, function(evt) {mover.mouseMove(evt);}, false);</para>
+    <para>
+  document.addEventListener(&apos;mouseup&apos;, function(evt) {mover.mouseEnd(evt);}, false);
+  </para>
+    <para>document.addEventListener(&apos;touchstart&apos;, function(evt) {mover = new moving(evt);}, false);
+  </para>
+    <para>document.addEventListener(&apos;touchmove&apos;, function(evt) {mover.mouseMove(evt);}, false);</para>
+    <para>
+  document.addEventListener(&apos;touchend&apos;, function(evt) {mover.mouseEnd(evt);}, false);
+
+</para>
+    <para>var back = document.getElementById(&apos;back&apos;);
+
+</para>
+    <para>back.addEventListener(&apos;click&apos;, function() {resetBook();}, false);
+}</para>
+  </abstract>
+  <abstract>
+    <title>Пример 2: Переход в главное меню</title>
+    <para>Функция посхоляет осуществить перемещение со страниц книги в главное меню.</para>
+    <para>function resetBook() {
+    </para>
+    <para>book = null;
+    document.getElementsByTagName(&apos;input&apos;)[0].value = &apos;&apos;;
+    </para>
+    <para>document.getElementById(&apos;fileHolder&apos;).style.display = &apos;block&apos;;
+    </para>
+    <para>document.getElementById(&apos;pages&apos;).innerHTML = &apos;&apos;;
+    </para>
+    <para>chapter = 0;
+    </para>
+    <para>page = 0;
+    </para>
+    <para>document.getElementById(&apos;menu&apos;).style.display = &apos;none&apos;;
+</para>
+    <para>}</para>
+  </abstract>
+  <abstract>
+    <title>Пример 3: Отображение страницы книги</title>
+    <para>Функция отображает текст открытой книги на странице HTML.</para>
+    <para>function showChapter(dir) {
+  </para>
+    <para>if(book &amp;&amp; book.opf.spine[chapter])
+  {
+    </para>
+    <para>var spine = book.opf.spine[chapter];
+    </para>
+    <para>var href = book.opf.manifest[spine][&apos;href&apos;];
+    </para>
+    <para>var doc = book.files[href];
+    </para>
+    <para>var html = new XMLSerializer().serializeToString(doc);
+    </para>
+    <para>var bookBox = document.getElementById(&apos;pages&apos;);
+    </para>
+    <para>bookBox.innerHTML = html;
+    </para>
+    <para>buildPages();
+    chapter += 1;
+  </para>
+    <para>} else {
+    </para>
+    <para>resetBook();
+  </para>
+    <para>}
+</para>
+    <para>}</para>
+  </abstract>
+</article>
