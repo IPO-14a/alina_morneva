@@ -2,6 +2,11 @@
 
 var mover = null;
 
+/**
+* Функция преднозначена для открытия премера книги,
+* загружает событья для обработки нажатия кнопок мыши
+* загружает обработких кнопки возврата страницы
+*/
 function preview()
 {
   document.getElementById('menu').style.display = 'none';
@@ -18,46 +23,40 @@ function preview()
     }
   }
 
-  document.addEventListener('mousedown',
-      function(evt) {mover = new moving(evt);},
-      false);
-
-  document.addEventListener('mousemove',
-      function(evt) {mover.mouseMove(evt);},
-      false);
-
-  document.addEventListener('mouseup',
-      function(evt) {mover.mouseEnd(evt);},
-      false);
-
-  document.addEventListener('touchstart',
-      function(evt) {mover = new moving(evt);},
-      false);
-
-  document.addEventListener('touchmove',
-      function(evt) {mover.mouseMove(evt);},
-      false);
-
-  document.addEventListener('touchend',
-      function(evt) {mover.mouseEnd(evt);},
-      false);
+/**
+* Обработчик вызывает функцию evt путем нажатия на кнопку мыши
+* ивызывает работу директива mover.
+* Если нажатие попало на одну из областей
+* работы обработчика, запускаеомя одна из функий.
+*/
+  document.addEventListener('mousedown', function(evt) {mover = new moving(evt);}, false);
+  document.addEventListener('mousemove', function(evt) {mover.mouseMove(evt);}, false);
+  document.addEventListener('mouseup', function(evt) {mover.mouseEnd(evt);}, false);
+  document.addEventListener('touchstart', function(evt) {mover = new moving(evt);}, false);
+  document.addEventListener('touchmove', function(evt) {mover.mouseMove(evt);}, false);
+  document.addEventListener('touchend', function(evt) {mover.mouseEnd(evt);}, false);
 
   var back = document.getElementById('back');
-  var toggle = document.getElementById('toggle');
- 
-  back.addEventListener('click',
-      function() {resetBook();},
-      false);
 
-  toggle.addEventListener('click',
-      function() {toggleStyle();},
-      false);
+/**
+* Обработчик вызывает функцию resetBook 
+* путем нажатия на кнопку мыши
+*/
+  back.addEventListener('click', function() {resetBook();}, false);
 }
-  
+
+/**
+* Функция открывает file для чтения
+* 
+* Если файл имеет расширение epub, запускается функция 
+* createBook.
+* Иначе, вызывается функции bookFromText. 
+*/  
 function update(file)
 {
   document.getElementById('menu').style.display = 'none';
   var reader = new FileReader();
+
   if(file.item(0).type.indexOf('epub') > -1)
   {
     reader.readAsBinaryString(file.item(0));
@@ -76,6 +75,12 @@ function update(file)
 }
 
 var book;
+/**
+* Функция открывает файлы с расширением epub
+* 
+* Загружает в fileBox элементы файла getElementById
+* и отображает главы на странице showChapter
+*/ 
 function createBook(epub)
 {
   book = new JSEpub(epub);
@@ -90,6 +95,12 @@ function createBook(epub)
   });
 }
 
+/**
+* Функция разбивает текс на страницы
+* 
+* Загружает в fileBox элементы файла getElementById
+* Отображает текст на странице HTML
+*/ 
 function bookFromText(txt)
 {
   var style = document.createElement('style');
@@ -102,6 +113,14 @@ function bookFromText(txt)
   fileBox.style.display = 'none';
 }
 
+/**
+* Функция закрывает книгу и возвращает
+* на исхожную страницу 
+* 
+* Сбрасывает переменную book
+* Очищает значения input, chapter и pages
+* Возвращает нас на страницу menu
+*/ 
 function resetBook() {
     book = null;
     document.getElementsByTagName('input')[0].value = '';
@@ -115,6 +134,14 @@ function resetBook() {
 var page = 0;
 var chapter = 0;
 
+/**
+* Функция отображает dir открытого нами файла 
+* 
+* Если книга существет и главы существуют
+* Сохдаем html страницу и помещаем в
+* bookBox текст. Если страница закончилась
+* увеличиваем переменную chapter. 
+*/
 function showChapter(dir) {
   if(book && book.opf.spine[chapter])
   {
@@ -131,6 +158,11 @@ function showChapter(dir) {
   }
 }
 
+/**
+* Функция размещает текст файла на странице
+* применяет к нему стили, определяет ширину 
+* и высоту экрана
+*/
 function buildPages()
 {
   document.getElementById('pageStyle').innerHTML = '';
@@ -159,6 +191,14 @@ function buildPages()
   document.getElementById('pageStyle').innerHTML = style;
 }
 
+/**
+* Функция перелистывает сраницу dir 
+* 
+* Получаем ID текущей страницы
+* Если страница существует, и мышкой
+* осуществлены необходимые манипуляции
+* текст смещается влево и открывается новая страница page
+*/
 function nextPage(dir) {
   var pages = document.getElementById('pages');
 
@@ -177,6 +217,11 @@ function nextPage(dir) {
   page += dir;
 }
 
+/**
+* Функция отображает кнопку возврата menu
+* при нажатии на экран, и блокирует его
+* при повторном нажатии 
+*/
 function toggleMenu() {
   var menu = document.getElementById('menu');
 
@@ -189,18 +234,10 @@ function toggleMenu() {
   menu.style.display = 'none';
 }
 
-function toggleStyle() {
-  var style = document.getElementById('style');
-
-  if (style.getAttribute('href') === 'style/dark.css')
-  {
-    style.setAttribute('href', 'style/light.css');
-    return;
-  }
-
-  style.setAttribute('href', 'style/dark.css');
-}
-
+/**
+* Добавляет стили к странице, определяет
+* координаты нажатия мыши screenX 
+*/
 var moving = function(evt) {
   this.pageStyle = document.getElementById('pages').style;
   this.startTime = evt.timeStamp;
@@ -245,6 +282,10 @@ moving.prototype = {
   }
 };
 
+/**
+* Функция загружает обработчики нажатия кнопок,
+* стии для страницы, загружает preview
+*/
 window.onload = function()
 {
   var fileBox = document.getElementsByTagName('input')[0];
