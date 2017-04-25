@@ -8,7 +8,7 @@ function preview()
   var reader = new FileReader();
   
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'books/PasswordIncorrect.txt', true)
+  xhr.open('GET', 'books/ImportancePreview.txt', true)
   xhr.send(null);
 
   xhr.onreadystatechange = function(){
